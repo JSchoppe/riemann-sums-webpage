@@ -1,0 +1,12 @@
+
+*{
+    background-color: black;
+    color: white;
+}
+
+#output-graph{
+    margin-left: 10vw;
+    width: 80vw;
+    height: 40vw;
+    background-color: rgb(19, 19, 19);
+}
