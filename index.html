@@ -6,15 +6,32 @@
     </head>
     <body>
         <h1>Visualizing the Riemann Sum</h1>
-        <section>
-            <h2>About the Riemann Sum</h2>
-            <p>
-                Riemann Sums can be used to describe multi-dimensional objects by breaking them down into cross sections.
-            </p>
-        </section>
-        <section>
-            <canvas id="output-graph" width="1000px" height="500px"></canvas>
-            <canvas id="output-graph2" width="1000px" height="500px"></canvas>
+        <section id="demo-grid">
+            <div>
+                <h2>About the Riemann Sum</h2>
+                <p>
+                    Riemann Sums can be used to describe multi-dimensional objects by breaking them down into cross sections.
+                    Consider the follow equation that is graphed to the right. I we want to know the area under the curve, we
+                    can simply take the integral from -4 to 4:
+                </p>
+                <img src="images/equation.jpg" id="equation-img">
+                <p>
+                    This gives us an answer, but where did that answer come from? The fact that the integral yeilds the area is
+                    proven by the Riemann Sum.
+                </p>
+            </div>
+            <div>
+                <canvas id="output-graph" width="1000px" height="500px"></canvas>
+            </div>
+            <div>
+                <input type="range" min="5" max="50" value="5" id="sum-slider">
+                <p id="sum-output">
+
+                </p>
+            </div>
+            <div>
+                <canvas id="output-graph2" width="1000px" height="500px"></canvas>
+            </div>
         </section>
         <section>
             <h2>About the Riemann Sum</h2>

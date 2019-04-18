@@ -101,14 +101,23 @@ function Graph2D(canvasElement){
     this.drawRiemannSumParabola = function(translateX, translateY, scaleX, scaleY, partitions, XrangeMin, XrangeMax){
         let partitionStep = (XrangeMax - XrangeMin) / (partitions + 1); // units per partition region
 
+        let areaCalculation = "";
+        let totalArea = 0;
+
         let currentStep = XrangeMin;
         let i;
         for(i = 0; i <= partitions; i++){
             let partitionY = ((Math.pow((1/scaleX) * (currentStep - translateX + (partitionStep / 2)), 2) * scaleY) + translateY);
             this.fillRegion(currentStep, 0, currentStep + partitionStep, partitionY);
 
+            totalArea += partitionY;
+            areaCalculation += " + (" + partitionStep.toFixed(4) + " * " + partitionY.toFixed(4) + ")";
             currentStep += partitionStep;
         }
+
+        totalArea = totalArea * partitionStep;
+        areaCalculation = totalArea.toFixed(8) + " =" + areaCalculation;
+        return areaCalculation;
     };
 }
 
@@ -119,12 +128,19 @@ graphA.maxX = 6;
 graphA.minY = -1;
 graphA.maxY = 5;
 graphA.drawGrid();
-graphA.drawRiemannSumParabola(0,4,2,-1, 9, -4 ,4);
 graphA.drawParabola(0,4,2,-1);
 
 var graphB = new Graph2D(document.querySelector("#output-graph2"));
-graphB.minX = -10;
+graphB.minX = -6;
+graphB.maxX = 6;
 graphB.minY = -1;
+graphB.maxY = 5;
 graphB.drawGrid();
-graphB.fillRegion(0,0,1,2);
+graphB.drawRiemannSumParabola(0,4,2,-1, 9, -4 ,4);
 graphB.drawParabola(0,4,2,-1);
+
+document.querySelector("#sum-slider").oninput = function() {
+    graphB.drawGrid();
+    document.querySelector("#sum-output").innerHTML = graphB.drawRiemannSumParabola(0,4,2,-1, Math.round(this.value), -4 ,4);
+    graphB.drawParabola(0,4,2,-1);
+};

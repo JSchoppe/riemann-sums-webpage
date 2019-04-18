@@ -7,6 +7,15 @@
 h1{
     
 }
+#equation-img{
+    height: 8em;
+}
+
+#demo-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+}
 
 #output-graph{
     margin-left: 10vw;
