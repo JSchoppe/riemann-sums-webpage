@@ -13,6 +13,7 @@ function Graph2D(canvasElement){
     this.xColor = "rgb(100, 25, 25)";
     this.yColor = "rgb(25, 100, 25)";
     this.fillColor = "rgb(25, 25, 100)";
+    this.funcColor = "rgb(255, 255, 255)";
     
     this.drawGrid = function(){
         this.context.clearRect(0, 0, viewHeight * 2, viewHeight)
@@ -74,11 +75,56 @@ function Graph2D(canvasElement){
         this.context.fillRect(left, top, width, height);
         this.context.stroke();
     };
+
+    this.drawParabola = function(translateX, translateY, scaleX, scaleY){
+        let ppuX = (viewHeight * 2) / (this.maxX - this.minX); // pixels per unit
+        let ppuY = viewHeight / (this.maxY - this.minY);
+        let unitStep = (this.maxX - this.minX) / (viewHeight * 2); // units per pixel
+        
+        this.context.strokeStyle = this.funcColor;
+        this.context.moveTo(0, -(Math.pow(this.minX, 2) - this.maxY) * ppuY);
+        this.context.beginPath();
+
+        let currentStep = this.minX;
+        while(currentStep <= this.maxX){
+            let nextX = (currentStep - this.minX) * ppuX;
+            // TODO extract the process of converting pixel/unit space
+            let nextY = (this.maxY - ((Math.pow((1/scaleX) * (currentStep - translateX), 2) * scaleY) + translateY)) * ppuY;
+
+            this.context.lineTo(nextX, nextY);
+
+
+            currentStep += unitStep; // step one pixel along the x-axis
+        }
+        this.context.stroke();
+    };
+    this.drawRiemannSumParabola = function(translateX, translateY, scaleX, scaleY, partitions, XrangeMin, XrangeMax){
+        let partitionStep = (XrangeMax - XrangeMin) / (partitions + 1); // units per partition region
+
+        let currentStep = XrangeMin;
+        let i;
+        for(i = 0; i <= partitions; i++){
+            let partitionY = ((Math.pow((1/scaleX) * (currentStep - translateX + (partitionStep / 2)), 2) * scaleY) + translateY);
+            this.fillRegion(currentStep, 0, currentStep + partitionStep, partitionY);
+
+            currentStep += partitionStep;
+        }
+    };
 }
 
 
 var graphA = new Graph2D(document.querySelector("#output-graph"));
-graphA.minX = -1;
+graphA.minX = -6;
+graphA.maxX = 6;
 graphA.minY = -1;
+graphA.maxY = 5;
 graphA.drawGrid();
-graphA.fillRegion(0,0,0.5,2);
+graphA.drawRiemannSumParabola(0,4,2,-1, 9, -4 ,4);
+graphA.drawParabola(0,4,2,-1);
+
+var graphB = new Graph2D(document.querySelector("#output-graph2"));
+graphB.minX = -10;
+graphB.minY = -1;
+graphB.drawGrid();
+graphB.fillRegion(0,0,1,2);
+graphB.drawParabola(0,4,2,-1);
