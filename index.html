@@ -24,7 +24,12 @@
                 <canvas id="output-graph" width="1000px" height="500px"></canvas>
             </div>
             <div>
-                <input type="range" min="5" max="50" value="5" id="sum-slider">
+                <p>
+                    The region under a graph can be represented as a series of rectangles. Adding the area of all of these rectangles
+                    is the Riemann Sum. This can be thought of as an approximation of the region under the curve. Use the slider below
+                    to play with the number of rectangles. You can see the Riemann Sum calculated below.
+                </p>
+                <input type="range" min="5" max="100" value="5" id="sum-slider">
                 <p id="sum-output">
 
                 </p>
@@ -34,9 +39,10 @@
             </div>
         </section>
         <section>
-            <h2>About the Riemann Sum</h2>
+            <h2>How Does the Riemann Sum Relate to the Integral?</h2>
             <p>
-                Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo Yo 
+                As the number of regions(partitions) increases, the approximation becomes closer and closer to the actual answer.
+                No matter how many partitions we create, we will never reach the actual area. We will always be some tiny amount away.
             </p>
         </section>
         <script src="script.js"></script>

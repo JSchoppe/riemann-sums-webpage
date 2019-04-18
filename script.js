@@ -12,8 +12,9 @@ function Graph2D(canvasElement){
     this.baseColor = "rgb(50, 50, 50)";
     this.xColor = "rgb(100, 25, 25)";
     this.yColor = "rgb(25, 100, 25)";
-    this.fillColor = "rgb(25, 25, 100)";
     this.funcColor = "rgb(255, 255, 255)";
+    this.riemannColor1 = "rgb(0,100,255)";
+    this.riemannColor2 = "rgb(0,255,100)";
     
     this.drawGrid = function(){
         this.context.clearRect(0, 0, viewHeight * 2, viewHeight)
@@ -70,7 +71,6 @@ function Graph2D(canvasElement){
         let top = -(y2 - this.maxY) * ppuY;
 
         this.context.lineWidth = "1";
-        this.context.fillStyle = this.fillColor;
         this.context.beginPath();
         this.context.fillRect(left, top, width, height);
         this.context.stroke();
@@ -101,6 +101,8 @@ function Graph2D(canvasElement){
     this.drawRiemannSumParabola = function(translateX, translateY, scaleX, scaleY, partitions, XrangeMin, XrangeMax){
         let partitionStep = (XrangeMax - XrangeMin) / (partitions + 1); // units per partition region
 
+        let flipFlop = false;
+
         let areaCalculation = "";
         let totalArea = 0;
 
@@ -108,6 +110,14 @@ function Graph2D(canvasElement){
         let i;
         for(i = 0; i <= partitions; i++){
             let partitionY = ((Math.pow((1/scaleX) * (currentStep - translateX + (partitionStep / 2)), 2) * scaleY) + translateY);
+
+            flipFlop = !flipFlop;
+            if (flipFlop){
+                this.context.fillStyle = this.riemannColor1;
+            }else{
+                this.context.fillStyle = this.riemannColor2;
+            }
+
             this.fillRegion(currentStep, 0, currentStep + partitionStep, partitionY);
 
             totalArea += partitionY;

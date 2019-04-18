@@ -5,8 +5,18 @@
 }
 
 h1{
-    
+    padding: 0.5em;
+    background-color: rgb(0,120,50);
+    font-family: 'Hind Guntur', sans-serif;
 }
+h2{
+    background-color: rgb(120, 50, 0); 
+}
+
+#sum-slider{
+    width: 95%;
+}
+
 #equation-img{
     height: 8em;
 }
