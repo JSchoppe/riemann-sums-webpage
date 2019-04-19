@@ -11,6 +11,33 @@ function update(){
     });
 }
 
+// Particle Influencers
+function windInfluencer(){
+
+    // set default turbulence values
+    this.maxFluctuationPerSecond = 0.5;
+    this.minTurbulenceX = -1;
+    this.maxTurbulenceX = 1;
+    this.minTurbulenceY = 1;
+    this.maxTurbulenceY = 3;
+
+    // set the wind velocity at this second
+    this.velocityX = 0;
+    this.velocityY = 0;
+
+
+    this.update = function(){
+        velocityX += Math.random() * frameStep * this.maxFluctuationPerSecond;
+        velocityY += Math.random() * frameStep * this.maxFluctuationPerSecond;
+    };
+    this.getInfluence = function(particle){
+
+    };
+}
+function gravityInfluencer(){
+    
+}
+
 // Particle Behaviors
 function snowParticle(emitter){
 
