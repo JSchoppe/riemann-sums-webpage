@@ -132,6 +132,9 @@ function Graph2D(canvasElement){
 }
 
 
+
+// Define page logic
+
 var graphA = new Graph2D(document.querySelector("#output-graph"));
 graphA.minX = -6;
 graphA.maxX = 6;
@@ -154,3 +157,10 @@ document.querySelector("#sum-slider").oninput = function() {
     document.querySelector("#sum-output").innerHTML = graphB.drawRiemannSumParabola(0,4,2,-1, Math.round(this.value), -4 ,4);
     graphB.drawParabola(0,4,2,-1);
 };
+
+var graphC = new Graph2D(document.querySelector("#background"));
+graphC.minX = -50;
+graphC.maxX = 50;
+graphC.minY = -25;
+graphC.maxY = 25;
+graphC.drawGrid();
