@@ -1,6 +1,53 @@
 
 *{
+    margin: 0px;
+    padding: 0px;
     color: white;
+    background-color: black;
+}
+
+.equation{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+#activity-bg{
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.95);
+}
+
+#activity{
+    margin-left: 12.5vw;
+    margin-top: 12.5vh;
+    width: 75vw;
+    height: 75vh;
+
+    display: grid;
+    grid-template-columns: 5em auto 5em;
+    grid-template-rows: 1.5em 1.5em auto;
+}
+
+.activity-hidden{
+    display: none;
+}
+
+#activity-button{
+    padding: 1em;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+#anti-activity-button{
+    padding: 1em;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 h1{
@@ -14,6 +61,10 @@ h2{
 
 #sum-slider{
     width: 95%;
+}
+
+#proof{
+    width: 50vw;
 }
 
 #equation-img{
@@ -37,6 +88,10 @@ h2{
     width: 40vw;
     height: 20vw;
     background-color: rgb(19, 19, 19);
+}
+#output-graph3{
+    width: 100%;
+    height: 100%;
 }
 #background{
     position: fixed;

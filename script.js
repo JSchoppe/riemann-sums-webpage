@@ -98,7 +98,7 @@ function Graph2D(canvasElement){
         }
         this.context.stroke();
     };
-    this.drawRiemannSumParabola = function(translateX, translateY, scaleX, scaleY, partitions, XrangeMin, XrangeMax){
+    this.drawRiemannSumParabola = function(translateX, translateY, scaleX, scaleY, partitions, XrangeMin, XrangeMax, entireOutput){
         let partitionStep = (XrangeMax - XrangeMin) / (partitions + 1); // units per partition region
 
         let flipFlop = false;
@@ -109,7 +109,7 @@ function Graph2D(canvasElement){
         let currentStep = XrangeMin;
         let i;
         for(i = 0; i <= partitions; i++){
-            let partitionY = ((Math.pow((1/scaleX) * (currentStep - translateX + (partitionStep / 2)), 2) * scaleY) + translateY);
+            let partitionY = ((Math.pow((1/scaleX) * (currentStep - translateX), 2) * scaleY) + translateY);
 
             flipFlop = !flipFlop;
             if (flipFlop){
@@ -121,13 +121,21 @@ function Graph2D(canvasElement){
             this.fillRegion(currentStep, 0, currentStep + partitionStep, partitionY);
 
             totalArea += partitionY;
-            areaCalculation += " + (" + partitionStep.toFixed(4) + " * " + partitionY.toFixed(4) + ")";
+            if (entireOutput){
+                areaCalculation += " + (" + partitionStep.toFixed(4) + " * " + partitionY.toFixed(4) + ")";
+            }
             currentStep += partitionStep;
         }
 
         totalArea = totalArea * partitionStep;
-        areaCalculation = totalArea.toFixed(8) + " =" + areaCalculation;
-        return areaCalculation;
+        areaCalculation = totalArea.toFixed(8) + " = " + areaCalculation;
+
+        if(entireOutput){
+            return areaCalculation;
+        }
+        else{
+            return totalArea.toFixed(8);
+        }
     };
 }
 
@@ -149,18 +157,88 @@ graphB.maxX = 6;
 graphB.minY = -1;
 graphB.maxY = 5;
 graphB.drawGrid();
-graphB.drawRiemannSumParabola(0,4,2,-1, 9, -4 ,4);
+graphB.drawRiemannSumParabola(0,4,2,-1, 9, -4 ,4, false);
 graphB.drawParabola(0,4,2,-1);
 
 document.querySelector("#sum-slider").oninput = function() {
     graphB.drawGrid();
-    document.querySelector("#sum-output").innerHTML = graphB.drawRiemannSumParabola(0,4,2,-1, Math.round(this.value), -4 ,4);
+    document.querySelector("#sum-output").innerHTML = graphB.drawRiemannSumParabola(0,4,2,-1, Math.round(this.value), -4 ,4, true);
     graphB.drawParabola(0,4,2,-1);
 };
 
-var graphC = new Graph2D(document.querySelector("#background"));
-graphC.minX = -50;
-graphC.maxX = 50;
-graphC.minY = -25;
-graphC.maxY = 25;
-graphC.drawGrid();
+
+var activityOpen = false;
+var background = document.querySelector("#activity-bg");
+document.querySelector("#activity-button").addEventListener("click", () => {
+    if (!activityOpen){
+        background.classList.remove("activity-hidden");
+        activityOpen = true;
+    }
+});
+document.querySelector("#anti-activity-button").addEventListener("click", () => {
+    window.close();
+});
+
+var currentGraphFunction = 1;
+var currentPartitions = 1;
+document.body.addEventListener("keydown", (e) => {
+    switch(e.keyCode){
+        case 27: // esc
+            if (activityOpen){
+                background.classList.add("activity-hidden");
+                activityOpen = false;
+            }
+            break;
+        case 37: // left
+            if (currentGraphFunction > 1){
+                currentGraphFunction--;
+                redrawActivity();
+            }
+            break;
+        case 39: // right
+            if (currentGraphFunction < 3){
+                currentGraphFunction++;
+                redrawActivity();
+            }
+            break;
+        case 38: // up
+            if (currentPartitions < 1000){
+                currentPartitions++;
+                redrawActivity();
+            }
+            break;
+        case 40: // down
+            if (currentPartitions > 1){
+                currentPartitions--;
+                redrawActivity();
+            }
+            break;
+    }
+});
+
+var activityGraph = new Graph2D(document.querySelector("#output-graph3"));
+var activityInfo = document.querySelector("#activity-info");
+function redrawActivity(){
+    switch(currentGraphFunction){
+        case 1:
+            activityGraph.minX = -6;
+            activityGraph.maxX = 6;
+            activityGraph.minY = -1;
+            activityGraph.maxY = 5;
+            activityGraph.drawGrid();
+            let area = activityGraph.drawRiemannSumParabola(0,4,2,-1, currentPartitions, -4 ,4, false);
+            activityInfo.innerHTML = "Function: Parabola | Partitions: " + currentPartitions + " | Riemann Area: " + area + " | True Area: (64/3) = 21.33333333";
+            activityGraph.drawParabola(0,4,2,-1);
+            break;
+        case 2:
+            activityGraph.minX = -10;
+            activityGraph.maxX = 10;
+            activityGraph.minY = -1;
+            activityGraph.maxY = 5;
+            activityGraph.drawGrid();
+            break;
+        case 3:
+            break;
+    }
+}
+redrawActivity();

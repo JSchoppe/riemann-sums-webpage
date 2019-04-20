@@ -15,7 +15,7 @@
                     Consider the follow equation that is graphed to the right. I we want to know the area under the curve, we
                     can simply take the integral from -4 to 4:
                 </p>
-                <img src="images/equation.jpg" id="equation-img">
+                <img src="images/equation.jpg" id="equation-img" class="equation">
                 <p>
                     This gives us an answer, but where did that answer come from? The fact that the integral yeilds the area is
                     proven by the Riemann Sum.
@@ -39,14 +39,58 @@
                 <canvas id="output-graph2" width="1000px" height="500px"></canvas>
             </div>
         </section>
-        <section>
-            <h2>How Does the Riemann Sum Relate to the Integral?</h2>
+        <section id="proof">
+            <h2>How is the Riemann Sum Calculated?</h2>
             <p>
                 As the number of regions(partitions) increases, the approximation becomes closer and closer to the actual answer.
                 No matter how many partitions we create, we will never reach the actual area. We will always be some tiny amount away.
+                This addition of the regions produces a long summation:
+            </p>
+            <img src="images/equation2.jpg" class="equation">
+            <p>
+                Since this notation can become very long and repetitive, a special symbol is used to describe the sum of these terms that
+                follow a similar pattern:
+            </p>
+            <img src="images/equation3.jpg" class="equation">
+            <p>
+                The first thing we can do to simplify this equation is to remove the region width term. This is because the width of every
+                region is the same by the definition of the Riemann Sum. The width term can be pulled off of each term, which allows it to
+                come out of the summation procedure as a constant multiple:
+            </p>
+            <img src="images/equation4.jpg" class="equation">
+            <p>
+                Our next step is to solve for the w and h terms to make our equation generic to any function. Our region width is simply
+                the length of the interval divided by the number of regions. The height of each region is the function value of the left side
+                of the current region. This is simply the left bounds plus the ratio of current region over total regions times the total interval.
+            </p>
+            <img src="images/equation5.jpg" class="equation">
+            <p>
+                Plugging all of this in yields this duanting equation:
+            </p>
+            <img src="images/equation6.jpg" class="equation">
+            <p>
+                This can be used to calculate Riemann Sums for normal intervals of a function. The higher the value used for r, the more accurate your
+                answer becomes but at the tradeoff of taking longer to compute. For those familiar with programming, the summation can be thought of
+                as a for loop that loops r times.
             </p>
         </section>
-        <canvas id="background" width="1000px" height="500px"></canvas>
+        <section>
+            <button id="activity-button">Ok that was hella boring, just give me some more graphs to play with</button>
+            <button id="anti-activity-button">Nice try buster, but you gotta get up pretty early in the morning to trick me into learning</button>
+            <div id="activity-bg" class="activity-hidden">
+                <div id="activity">
+                    <p></p>
+                    <p>(Left) and (Right) to change the function</p>
+                    <p>(Esc) to exit</p>
+                    <p></p>
+                    <p id="activity-info">Function: Parabola | Partitions: 0 | Riemann Area: 0 | True Area: 0</p>
+                    <p></p>
+                    <p>(Down) decrease partitions</p>
+                    <canvas id="output-graph3" width="1000px" height="500px"></canvas>
+                    <p>(Up) increase partitions</p>
+                </div>
+            </div>
+        </section>
         <script src="script.js"></script>
     </body>
 </html>
