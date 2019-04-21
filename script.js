@@ -190,6 +190,53 @@ function Graph2D(canvasElement){
         totalArea = totalArea * partitionStep; // calculate and return total area(full string not implemented)
         return totalArea.toFixed(8);
     };
+
+    // Draws the untransformed sine wave:
+    this.drawSinWave = function(){
+        let ppuX = (viewHeight * 2) / (this.maxX - this.minX); // pixels per unit
+        let ppuY = viewHeight / (this.maxY - this.minY);
+        let unitStep = (this.maxX - this.minX) / (viewHeight * 2); // units per pixel
+        
+        this.context.strokeStyle = this.funcColor;
+        this.context.moveTo(0, (this.maxY - Math.sin(this.minX)) * ppuY);
+        this.context.beginPath();
+
+        let currentStep = this.minX;
+        while(currentStep <= this.maxX){ // iterate along the x axis, one pixel at a time to draw the continuous function
+            let nextX = (currentStep - this.minX) * ppuX;
+            let nextY = (this.maxY - Math.sin(currentStep)) * ppuY;
+
+            this.context.lineTo(nextX, nextY);
+            currentStep += unitStep; // step one pixel along the x-axis
+        }
+        this.context.stroke();
+    };
+    // Draws reimann regions for the sine wave:
+    this.drawRiemannSumSinWave = function(partitions, XrangeMin, XrangeMax){
+        let partitionStep = (XrangeMax - XrangeMin) / (partitions + 1); // units per partition region
+
+        let totalArea = 0;
+        let currentStep = XrangeMin;
+        let flipFlop = false;
+        let i;
+        for(i = 0; i <= partitions; i++){ // draw each partition
+            let partitionY = Math.sin(currentStep);
+
+            flipFlop = !flipFlop; // alternate colors of partitions
+            if (flipFlop){
+                this.context.fillStyle = this.riemannColor1;
+            }else{
+                this.context.fillStyle = this.riemannColor2;
+            }
+            this.fillRegion(currentStep, 0, currentStep + partitionStep, partitionY);
+
+            totalArea += partitionY;
+            currentStep += partitionStep; // step to the next partition
+        }
+
+        totalArea = totalArea * partitionStep; // multiple the final sum by the partition width
+        return totalArea.toFixed(8);
+    };
 };
 
 //
@@ -217,9 +264,10 @@ function unfreezeScroll(){
 
 // Bind the first slider to update the contents of graph B:
 var sumSlider = document.querySelector("#sum-slider");
+var sumOut = document.querySelector("#sum-output");
 sumSlider.oninput = function(){
     graphB.drawGrid();
-    sumSlider.innerHTML = graphB.drawRiemannSumParabola(0,4,2,-1, Math.round(this.value), -4 ,4, true);
+    sumOut.innerHTML = graphB.drawRiemannSumParabola(0,4,2,-1, Math.round(this.value), -4 ,4, true);
     graphB.drawParabola(0,4,2,-1);
 };
 
@@ -252,8 +300,8 @@ function redrawActivity(){
             activityGraph.minY = -1;
             activityGraph.maxY = 5;
             activityGraph.drawGrid();
-            let area = activityGraph.drawRiemannSumParabola(0,4,2,-1, currentPartitions, -4 ,4, false);
-            activityInfo.innerHTML = "Function: Parabola | Partitions: " + currentPartitions + " | Riemann Area: " + area + " | True Area: (64/3) = 21.33333333";
+            let areaA = activityGraph.drawRiemannSumParabola(0,4,2,-1, currentPartitions, -4 ,4, false);
+            activityInfo.innerHTML = "Function: Parabola | Partitions: " + currentPartitions + " | Riemann Area: " + areaA + " | True Area: (64/3) = 21.33333333";
             activityGraph.drawParabola(0,4,2,-1);
             break;
         case 2:
@@ -262,11 +310,19 @@ function redrawActivity(){
             activityGraph.minY = -1;
             activityGraph.maxY = 3;
             activityGraph.drawGrid();
-            let a = activityGraph.drawRiemannSumSemiCircle(2, currentPartitions);
-            activityInfo.innerHTML = "Function: Circle | Partitions: " + currentPartitions + " | Riemann Area: " + a + " | True Area: (2pi) = 6.28318531";
+            let areaB = activityGraph.drawRiemannSumSemiCircle(2, currentPartitions);
+            activityInfo.innerHTML = "Function: Circle | Partitions: " + currentPartitions + " | Riemann Area: " + areaB + " | True Area: (2pi) = 6.28318531";
             activityGraph.drawSemiCircle(2);
             break;
         case 3:
+            activityGraph.minX = -1;
+            activityGraph.maxX = 6;
+            activityGraph.minY = -2;
+            activityGraph.maxY = 2;
+            activityGraph.drawGrid();
+            let areaC = activityGraph.drawRiemannSumSinWave(currentPartitions, 0, Math.PI);
+            activityInfo.innerHTML = "Function: Sin | Partitions: " + currentPartitions + " | Riemann Area: " + areaC + " | True Area: 2";
+            activityGraph.drawSinWave();
             break;
     }
 };
